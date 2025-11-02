@@ -1,0 +1,5 @@
+# SSH client configuration for server coneection without password
+
+Host *
+    IdentityFile ~/.ssh/school
+    PasswordAuthentication no
