@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+#Configure an Ubuntu machine with nginx on port 80 and return the required text
+
+set -e
+
+#  Install nginx
+apt-get update -y
+apt-get install -y nginx
+
+#  Put the required content at the root
+echo "Holberton School for the win!" > /var/www/html/index.html
+
+#  Ensure the default site listens on 80 and serves /var/www/html
+cat > /etc/nginx/sites-available/default << 'EOF'
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html index.htm;
+
+    server_name _;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+EOF
+
+#  Test config (will exit non-zero if invalid)
+nginx -t
+
+#  Start/reload nginx WITHOUT systemctl
+if pidof nginx >/dev/null 2>&1; then
+    # try a graceful reload; fall back to restart via service
+    nginx -s reload || service nginx restart
+else
+    service nginx start
+fi
+
+#  Verify it listens on port 80 (use ss, not netstat)
+if ss -ltnp 2>/dev/null | grep -qE 'LISTEN.*:80 .*nginx'; then
+    echo "Nginx is running on port 80"
+else
+    echo "Nginx failed to start on port 80" >&2
+    exit 1
+fi
