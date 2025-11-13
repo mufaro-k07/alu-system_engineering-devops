@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Configures a custom 404 error page in Nginx:
+# - Returns proper HTTP 404 code
+# - Displays: Ceci n'est pas une page
+
+export DEBIAN_FRONTEND=noninteractive
+
+# Install nginx
+apt-get update -y
+apt-get install -y nginx
+
+# Create the custom 404 error page
+echo "Ceci n'est pas une page" > /var/www/html/custom_404.html
+
+# Overwrite Nginx default config to include custom 404 page
+cat > /etc/nginx/sites-available/default << 'EOF'
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html index.htm;
+
+    server_name _;
+
+    # Custom 404 page
+    error_page 404 /custom_404.html;
+    location = /custom_404.html {
+        internal;
+    }
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+EOF
+
+# Test configuration and restart nginx
+nginx -t
+service nginx restart
