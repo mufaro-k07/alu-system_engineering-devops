@@ -11,15 +11,27 @@ apt-get install -y nginx
 # Update index page
 echo 'Holberton School for the win!' > /var/www/html/index.html
 
-NGINX_DEFAULT="/etc/nginx/sites-available/default"
+# Overwrite the default Nginx server configuration
+cat > /etc/nginx/sites-available/default << 'EOF'
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
 
-# Add redirect only if it doesn't exist yet
-if ! grep -q "location /redirect_me" "$NGINX_DEFAULT"; then
-  sed -i 's@server_name _;@server_name _;\\n\\tlocation /redirect_me {\\n\\t\\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\\n\\t}@' "$NGINX_DEFAULT"
-fi
+    root /var/www/html;
+    index index.html index.htm;
 
-# Verify nginx config
+    server_name _;
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+EOF
+
+# Test the configuration and restart nginx
 nginx -t
-
-# Start / restart nginx (no systemctl)
 service nginx restart
