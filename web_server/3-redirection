@@ -15,7 +15,7 @@ NGINX_DEFAULT="/etc/nginx/sites-available/default"
 
 # Add redirect only if it doesn't exist yet
 if ! grep -q "location /redirect_me" "$NGINX_DEFAULT"; then
-  sed -i 's@server_name _;@server_name _;\n\tlocation /redirect_me {\n\t\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t}@' "$NGINX_DEFAULT"
+  sed -i 's@server_name _;@server_name _;\\n\\tlocation /redirect_me {\\n\\t\\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\\n\\t}@' "$NGINX_DEFAULT"
 fi
 
 # Verify nginx config
