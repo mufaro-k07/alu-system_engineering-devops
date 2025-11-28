@@ -2,41 +2,85 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Custom 404 - Ceci n'est pas une page</title>
+    <title>404 — Page Not Found</title>
     <style>
         body {
-            background: #0d1117;
-            font-family: Arial, sans-serif;
-            color: #c9d1d9;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #1b1f3b;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #fff;
             text-align: center;
-            padding: 50px;
         }
+
+        .container {
+            max-width: 600px;
+            padding: 20px;
+        }
+
         h1 {
-            font-size: 60px;
-            margin-bottom: 10px;
+            font-size: 110px;
+            margin: 0;
+            letter-spacing: -5px;
+            background: linear-gradient(90deg, #ff007f, #ffdd00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
+
+        h2 {
+            margin-top: -10px;
+            font-size: 28px;
+            font-weight: 300;
+        }
+
         p {
-            font-size: 20px;
-            margin-bottom: 30px;
-        }
-        a {
-            color: #58a6ff;
-            text-decoration: none;
+            margin-top: 20px;
             font-size: 18px;
+            opacity: 0.9;
         }
-        a:hover {
-            text-decoration: underline;
+
+        .btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 25px;
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            background: linear-gradient(90deg, #ff007f, #ffdd00);
+            font-weight: bold;
+            transition: 0.3s;
         }
- 
+
+        .btn:hover {
+            opacity: 0.8;
+            transform: translateY(-3px);
+        }
+
+        .note {
+            margin-top: 40px;
+            font-size: 13px;
+            opacity: 0.5;
+        }
     </style>
 </head>
-
 <body>
+<div class="container">
     <h1>404</h1>
-    <p><strong>Ceci n'est pas une page</strong></p>
-    <p>But here are some awesome places you *can* visit:</p>
+    <h2>Oops! This page wandered off.</h2>
 
+    <p>
+        We looked everywhere, but couldn’t find what you were searching for.<br>
+        <strong>Ceci n'est pas une page</strong> — but it *is* a pretty cool 404 screen.
+    </p>
 
-    <p style="margin-top:50px;">Feel free to explore — or go back to safety.</p>
+    <a class="btn" href="/">Take me home</a>
+
+    <div class="note">
+        Designed with ❤️ for System Engineering DevOps project.
+    </div>
+</div>
 </body>
 </html>
