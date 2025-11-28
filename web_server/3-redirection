@@ -1,37 +1,17 @@
 #!/usr/bin/env bash
-# Configures Nginx to redirect /redirect_me to another page (301 Moved Permanently)
+# Configures Nginx so /redirect_me returns a 301 redirect to a target URL
 
-set -e
-export DEBIAN_FRONTEND=noninteractive
-
-# Install nginx
 apt-get update -y
 apt-get install -y nginx
 
-# Update index page
-echo 'Holberton School for the win!' > /var/www/html/index.html
+# Recreate the default index page (like in 1-install_nginx_web_server)
+echo "Hello World!" > /var/www/html/index.html
 
-# Overwrite the default Nginx server configuration
-cat > /etc/nginx/sites-available/default << 'EOF'
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
+CONF="/etc/nginx/sites-available/default"
 
-    root /var/www/html;
-    index index.html index.htm;
+# Insert a location block for /redirect_me only once
+if ! grep -q "location /redirect_me" "$CONF"; then
+    sed -i 's|server_name _;|server_name _;\n\n\tlocation /redirect_me {\n\t\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t}|' "$CONF"
+fi
 
-    server_name _;
-
-    location /redirect_me {
-        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-    }
-
-    location / {
-        try_files $uri $uri/ =404;
-    }
-}
-EOF
-
-# Test the configuration and restart nginx
-nginx -t
 service nginx restart
