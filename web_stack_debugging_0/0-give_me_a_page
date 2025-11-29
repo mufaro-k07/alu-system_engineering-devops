@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Configure Apache to serve a page containing 'Hello Holberton'
+# Fix Apache to serve a page containing 'Hello Holberton'
 
 service apache2 start
 echo "Hello Holberton" > /var/www/html/index.html
