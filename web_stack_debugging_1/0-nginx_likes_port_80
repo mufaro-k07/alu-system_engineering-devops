@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 # Fix Nginx so that it is running and listening on port 80
 
-apt-get update -y
-apt-get install -y nginx
-
 CONF="/etc/nginx/sites-available/default"
 
 # If there's only an IPv6 listen, add an IPv4 listen on port 80
