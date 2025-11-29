@@ -1,23 +1,18 @@
 #!/usr/bin/env bash
-# Fix Nginx so that it is running and listening on port 80
+# Fix Nginx so it runs and listens on port 80 on all IPv4 addresses
 
-apt-get update -y
-apt-get install -y nginx
+# Fix the default site configuration to ensure it listens on port 80
+CONF="/etc/nginx/sites-available/default"
 
-cat > /etc/nginx/sites-available/default << 'EOF'
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
+# Make sure it listens on port 80 (IPv4 and IPv6) – both buggy 8080 and correct 80 cases
+sed -i 's/listen 80 default_server;/listen 80 default_server;/g' "$CONF"
+sed -i 's/listen \[::\]:80 default_server;/listen [::]:80 default_server;/g' "$CONF"
+sed -i 's/listen 8080 default_server;/listen 80 default_server;/g' "$CONF"
+sed -i 's/listen \[::\]:8080 default_server;/listen [::]:80 default_server;/g' "$CONF"
 
-    root /var/www/html;
-    index index.html index.htm;
-
-    server_name _;
-
-    location / {
-        try_files $uri $uri/ =404;
-    }
-}
-EOF
+# Ensure the site is enabled
+if [ ! -e /etc/nginx/sites-enabled/default ]; then
+    ln -s "$CONF" /etc/nginx/sites-enabled/default
+fi
 
 service nginx restart
