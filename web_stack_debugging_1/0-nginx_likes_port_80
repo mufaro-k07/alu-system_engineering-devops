@@ -10,7 +10,7 @@ fi
 
 # Ensure the site is enabled
 if [ ! -e /etc/nginx/sites-enabled/default ]; then
-    ln -s "$CONF" /etc/nginx/sites-enabled/default"
+    ln -s "$CONF" /etc/nginx/sites-enabled/default
 fi
 
 # Restart Nginx to apply changes
