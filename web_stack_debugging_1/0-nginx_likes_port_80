@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # Fix Nginx so that it is running and listening on port 80
 
+# Install nginx (if not already installed)
 apt-get update -y
 apt-get install -y nginx
 
+# Overwrite the default site config with a minimal, valid config
 cat > /etc/nginx/sites-available/default << 'EOF'
 server {
     listen 80 default_server;
@@ -20,4 +22,5 @@ server {
 }
 EOF
 
+# Start / restart nginx
 service nginx restart
