@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
-# you just have to restart apache
-sudo service apache2 restart
+# Configure Apache to serve a page containing 'Hello Holberton'
+
+echo "Hello Holberton" > /var/www/html/index.html
