@@ -1,17 +1,4 @@
 #!/usr/bin/env bash
-# Fix Nginx so that it is running and listening on port 80
-
-CONF="/etc/nginx/sites-available/default"
-
-# If there's only an IPv6 listen, add an IPv4 listen on port 80
-if ! grep -q "listen 80 default_server" "$CONF"; then
-    sed -i '/listen \[::\]:80 default_server;/a\    listen 80 default_server;' "$CONF"
-fi
-
-# Ensure the site is enabled
-if [ ! -e /etc/nginx/sites-enabled/default ]; then
-    ln -s "$CONF" /etc/nginx/sites-enabled/default
-fi
-
-# Restart Nginx to apply changes
-service nginx restart
+# The server was initially listening on port 8080 instead of 80.
+sed -i 's|8080|80|g' /etc/nginx/sites-enabled/default
+sudo service nginx restart
